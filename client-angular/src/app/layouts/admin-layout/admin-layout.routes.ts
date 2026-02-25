@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { AuthGuard } from '../../shared-ui';
+import { DashboardComponent } from '../../views/admin-pages/dashboard/dashboard.component';
 
 const adminlayoutRoutes: Routes = [
   {
@@ -12,18 +13,26 @@ const adminlayoutRoutes: Routes = [
         path: 'dashboard',
         loadComponent: () =>
           import('../../views/admin-pages/dashboard/dashboard.component').then(
-            (m) => m.DashboardComponent
+            (m) => m.DashboardComponent,
           ), // Same here for DashboardComponent
       },
       {
         path: 'transcriptions',
         loadComponent: () =>
-          import(
-            '../../views/admin-pages/transcription/transcription.component'
-          ).then((m) => m.transcriptionComponent),
+          import('../../views/admin-pages/transcription/transcription.component').then(
+            (m) => m.transcriptionComponent,
+          ),
       },
     ],
   },
 ];
+
+// const adminRoutes: Routes = [
+//   {
+//     path: '',
+//     canActivate: [AuthGuard],
+//     component: DashboardComponent,
+//   },
+// ];
 
 export default adminlayoutRoutes;

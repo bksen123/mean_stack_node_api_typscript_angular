@@ -1,31 +1,48 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  Input,
+  output,
+  Output,
+  EventEmitter,
+} from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Alert, AlertType } from './alert.model';
 import { AlertService } from './alert.service';
 
 @Component({
   selector: 'app-alert',
-  templateUrl: './alert.component.html'
+  standalone: true,
+  templateUrl: './alert.component.html',
 })
 export class AlertComponent implements OnInit, OnDestroy {
   private subscription: Subscription = new Subscription();
   alerts: Alert[] = [];
+  @Input() childValue: any;
+  @Output() childValueChange = new EventEmitter<any>();
 
-  constructor(private alertService: AlertService) { }
+  constructor(private alertService: AlertService) {}
 
   ngOnInit() {
-    this.subscription = this.alertService.getAlert().subscribe((alert: Alert) => {
-      if (!alert) {
-        // clear alerts when an empty alert is received
-        this.alerts = [];
-        return;
-      }
-      // add alert to array
-      this.alerts.push(alert);
-    });
+    this.subscription = this.alertService
+      .getAlert()
+      .subscribe((alert: Alert) => {
+        if (!alert) {
+          // clear alerts when an empty alert is received
+          this.alerts = [];
+          return;
+        }
+        // add alert to array
+        this.alerts.push(alert);
+      });
+  }
+
+  changeName() {
+    this.childValueChange.emit('bharat Kumar sen');
   }
   removeAlert(alert: Alert) {
-    this.alerts = this.alerts.filter(x => x !== alert);
+    this.alerts = this.alerts.filter((x) => x !== alert);
   }
 
   cssClass(alert: Alert) {
@@ -43,9 +60,8 @@ export class AlertComponent implements OnInit, OnDestroy {
       case AlertType.Warning:
         return 'alert alert-warning';
     }
-    return
+    return;
   }
-
 
   ngOnDestroy() {
     this.subscription.unsubscribe();

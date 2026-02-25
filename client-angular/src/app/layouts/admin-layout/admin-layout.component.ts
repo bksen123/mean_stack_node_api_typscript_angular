@@ -30,7 +30,7 @@ export class AdminLayoutComponent {
     public jwtService: JwtService,
     public globalService: GlobalService,
     public router: Router,
-    public toastr: ToastrService
+    public toastr: ToastrService,
   ) {}
 
   ngOnInit() {
@@ -43,7 +43,11 @@ export class AdminLayoutComponent {
   }
 
   navItems = [
-    { label: 'Dashboard', link: '/admin/dashboard', icon: 'bi bi-speedometer2' },
+    {
+      label: 'Dashboard',
+      link: '/admin/dashboard',
+      icon: 'bi bi-speedometer2',
+    },
     {
       label: 'Transcriptions',
       link: '/admin/transcriptions',

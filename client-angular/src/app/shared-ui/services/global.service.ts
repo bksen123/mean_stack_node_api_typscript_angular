@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { computed, Injectable, signal } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { catchError, map, Observable, Subject, throwError } from 'rxjs';
@@ -11,6 +11,13 @@ import { HttpClient, HttpEventType } from '@angular/common/http';
   providedIn: 'root',
 })
 export class GlobalService {
+  count = signal(0);
+  user = signal({
+    name: 'Bharat',
+    age: 25,
+    city: 'Nagpur',
+  });
+
   private subject = new Subject<any>();
   private progress = new Subject<any>();
   baseUrl: string = environment.baseUrl;
@@ -23,7 +30,14 @@ export class GlobalService {
     private titleService: Title,
     private apiService: ApiService,
     private httpClient: HttpClient,
-  ) { }
+  ) {
+    this.count.set(5);
+
+    let doubleCount = computed(() => this.count() * 2);
+
+    console.log(this.count()); // 2
+    console.log(doubleCount()); // 2
+  }
 
   patternMatchRegex(inputVal: any, InputType: string) {
     let RegEx: any = '';
@@ -33,11 +47,37 @@ export class GlobalService {
       RegEx = new RegExp('^((\\+91-?)|0)?[0-9]{10}$');
     } else if (InputType === 'strongPasswordCheck') {
       RegEx = new RegExp(
-        '^(?=.*?[A-Z])(?=.*?[a-z])(?=.*[^A-Za-z0-9])(?=.*?[0-9]).{8,}$'
+        '^(?=.*?[A-Z])(?=.*?[a-z])(?=.*[^A-Za-z0-9])(?=.*?[0-9]).{8,}$',
       );
     }
     const validRex = RegEx.test(inputVal);
     return validRex;
+  }
+
+  increment() {
+    this.count.update((ele) => ele + 1);
+    this.updateName();
+  }
+
+  decrement() {
+    if (this.count()) {
+      this.count.update((ele) => ele - 1);
+    }
+    this.updateCity();
+  }
+
+  updateName(newName?: string) {
+    this.user.update((u) => ({
+      ...u,
+      name: 'Bharat kumar sen',
+    }));
+  }
+
+  updateCity(newCity?: string) {
+    this.user.update((u) => ({
+      ...u,
+      city: 'Indore',
+    }));
   }
 
   getProgress(): Observable<any> {
@@ -79,7 +119,7 @@ export class GlobalService {
             this.router.navigate(['/login']);
           }
         },
-        (error) => { }
+        (error) => {},
       );
     }
   }
@@ -92,8 +132,8 @@ export class GlobalService {
         email: userInfo.email,
       };
       this.usersService.logout().subscribe(
-        (data) => { },
-        (error) => { }
+        (data) => {},
+        (error) => {},
       );
     }
   }
@@ -106,7 +146,7 @@ export class GlobalService {
     const extension = image.name.substring(image.name.lastIndexOf('.'));
     let fileName = image.name.replace(
       image.name.substr(image.name.lastIndexOf('.')),
-      ''
+      '',
     );
 
     fileName = fileName.replace(/[.]/g, '');
@@ -115,13 +155,10 @@ export class GlobalService {
     const formData = new FormData();
     formData.append('subscription_banner', image, newFileName);
     return this.httpClient.post(this.baseUrl + 'subscription/save', formData);
-
   }
 
-
-
   FileUploadProgressBar(file: any) {
-    this.setProgress(1)
+    this.setProgress(1);
     const formData = new FormData();
     formData.append('image', file);
 
@@ -133,7 +170,7 @@ export class GlobalService {
       .pipe(
         map((event: any) => {
           if (event.type == HttpEventType.UploadProgress) {
-            this.setProgress(Math.round((100 / event.total) * event.loaded))
+            this.setProgress(Math.round((100 / event.total) * event.loaded));
           } else if (event.type == HttpEventType.Response) {
             // this.setProgress(null);
             // this.setProgress(null);
@@ -143,9 +180,9 @@ export class GlobalService {
           this.setProgress(null);
           alert(err.message);
           return throwError(err.message);
-        })
-      )
-      // .toPromise();
+        }),
+      );
+    // .toPromise();
   }
 
   // this method will destroy our session after 12 hours.
@@ -155,7 +192,7 @@ export class GlobalService {
       let sesionStartTime = new Date(user.sesionStartTime);
       let currentTime = new Date();
       let diff = currentTime.valueOf() - sesionStartTime.valueOf();
-      let diffInHours = diff / 1000 / 60 / 60
+      let diffInHours = diff / 1000 / 60 / 60;
       diffInHours = Number(diffInHours.toFixed());
       if (diffInHours > environment.sessionTime) {
         this.jwtService.destroyToken();

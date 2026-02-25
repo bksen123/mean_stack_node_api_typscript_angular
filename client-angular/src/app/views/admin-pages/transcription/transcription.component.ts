@@ -7,13 +7,14 @@ import { newTranscription } from './new-transcription';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { debounceTime, Subject, Subscription } from 'rxjs';
 import { TranscriptionService } from '../../../shared-ui/services/transcription.service';
+import { AlertComponent } from '../../../shared-ui/alert';
 
 declare var bootstrap: any;
 
 @Component({
   selector: 'app-transcription',
   standalone: true,
-  imports: [SharedUiModule],
+  imports: [SharedUiModule, AlertComponent],
   templateUrl: './transcription.component.html',
   styleUrl: './transcription.component.scss',
 })
@@ -41,12 +42,12 @@ export class transcriptionComponent {
   @ViewChild('deletetranscriptionModal', { static: false })
   public deletetranscriptionModal: any = ModalDirective;
   transcriptions: any;
-
+  parentValue: any = 'bharat';
   constructor(
     private spinner: NgxSpinnerService,
     private transcriptionService: TranscriptionService,
     private toastr: ToastrService,
-    private globalService: GlobalService
+    private globalService: GlobalService,
   ) {}
 
   ngOnInit(): void {
@@ -85,7 +86,7 @@ export class transcriptionComponent {
     console.log('params', params);
     this.transcriptionService.getAllTranscription(params).subscribe({
       next: (res: any) => {
-        console.log("res===================", res);
+        console.log('res===================', res);
         if (res.status == 200) {
           this.transcriptionList = res?.data.items || [];
           this.totalItems = res.data.total || 0;
@@ -126,28 +127,30 @@ export class transcriptionComponent {
 
   deleteTranscription(): void {
     this.spinner.show();
-    this.transcriptionService.deleteTranscription({ _id: this.newTranscription._id}).subscribe({
-      next: (response: any) => {
-        if (response.status === 200) {
-          this.toastr.success(response.message, 'Success!');
-        } else {
-          this.toastr.error(response.message, 'Error!');
-        }
-        this.fetchTranscriptions();
-        this.closeModel();
-      },
-      error: (err: any) => {
-        this.toastr.error('Something went wrong. Please try again.');
-        this.spinner.hide();
-      }
-    });
+    this.transcriptionService
+      .deleteTranscription({ _id: this.newTranscription._id })
+      .subscribe({
+        next: (response: any) => {
+          if (response.status === 200) {
+            this.toastr.success(response.message, 'Success!');
+          } else {
+            this.toastr.error(response.message, 'Error!');
+          }
+          this.fetchTranscriptions();
+          this.closeModel();
+        },
+        error: (err: any) => {
+          this.toastr.error('Something went wrong. Please try again.');
+          this.spinner.hide();
+        },
+      });
   }
 
   saveupdateTranscription(changeStatus?: any): void {
     let postData: newTranscription = changeStatus || this.newTranscription;
     if (!changeStatus && this.transcriptionFormRef.invalid) {
-      Object.values(this.transcriptionFormRef.controls).forEach((control: any) =>
-        control.markAsTouched()
+      Object.values(this.transcriptionFormRef.controls).forEach(
+        (control: any) => control.markAsTouched(),
       );
       return;
     }
@@ -163,7 +166,7 @@ export class transcriptionComponent {
       },
       error: (err) => {
         this.toastr.error(err, 'Error!');
-      }
+      },
     });
   }
 
@@ -174,5 +177,12 @@ export class transcriptionComponent {
 
   ngOnDestroy(): void {
     this.transcriptions.unsubscribe();
+  }
+
+  increment() {
+    this.globalService.increment();
+  }
+  decrement() {
+    this.globalService.decrement();
   }
 }

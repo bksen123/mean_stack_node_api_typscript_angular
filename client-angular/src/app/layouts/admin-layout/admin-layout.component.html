@@ -27,8 +27,8 @@
         </button>
         <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="profileDropdown">
           <li class="px-3 py-2 text-center">
-            <img  [src]="userDetails.photo ? userDetails.photo : 'assets/user_logo.webp'" style="height: 70px; width: 70px" class="rounded-circle mb-2"
-              alt="Profile" />
+            <img [src]="userDetails.photo ? userDetails.photo : 'assets/user_logo.webp'"
+              style="height: 70px; width: 70px" class="rounded-circle mb-2" alt="Profile" />
             <div class="fw-bold">{{this.userDetails.name | titlecase}}</div>
             <div class="text-muted" style="font-size: 12px">
               {{userDetails.email}}
@@ -47,6 +47,8 @@
     </div>
   </nav>
 
+  {{globalService.count()}}
+  {{globalService.user() | json}}
   <!-- Content Area (Sidebar + Main) -->
   <div class="d-flex flex-grow-1 overflow-hidden">
     <!-- Sidebar -->
@@ -55,9 +57,8 @@
       <!-- Nav Links -->
       <ul class="nav flex-column w-100 flex-grow-1  py-3">
         <li class="nav-item mb-2" *ngFor="let item of navItems" [routerLink]="item.link">
-          <a class="nav-link text-dark d-flex align-items-center gap-2" 
-            routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"
-            [attr.title]="isCollapsed ? item.label : null">
+          <a class="nav-link text-dark d-flex align-items-center gap-2" routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }" [attr.title]="isCollapsed ? item.label : null">
             <i class="{{ item.icon }}"></i>
             <span *ngIf="!isCollapsed" class="label-text">{{
               item.label
