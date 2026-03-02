@@ -22,39 +22,35 @@ export class ApiService {
     private httpClient: HttpClient,
     private jwtService: JwtService,
     private toastr: ToastrService,
-    ) {}
+  ) {}
 
   post(url: string, param?: any): Observable<any> {
-		// console.log("param",param);
+    // console.log("param",param);
     const apiURL = this.apiBase + url;
     // let headers = this.getHeader();
-    return this.httpClient
-      .post(apiURL, param, { withCredentials: true })
-      .pipe(map((res) => res),
-      catchError(async (error) => this.errorHandling(error))
+    return this.httpClient.post(apiURL, param, { withCredentials: true }).pipe(
+      map((res) => res),
+      catchError(async (error) => this.errorHandling(error)),
     );
   }
 
   get(url: string, param?: object): Observable<any> {
     const apiUrl = this.apiBase + url;
     // let headers = this.getHeader();
-    return this.httpClient
-      .get(apiUrl, { withCredentials: true })
-      .pipe(map((res) => res),
-        catchError(async (error) => this.errorHandling(error))
-      );
+    return this.httpClient.get(apiUrl, { withCredentials: true }).pipe(
+      map((res) => res),
+      catchError(async (error) => this.errorHandling(error)),
+    );
   }
 
   delete(url: string, param?: any): Observable<any> {
     // let headers = this.getHeader();
     const apiURL = this.apiBase + url;
-    return this.httpClient
-      .delete(apiURL)
-      .pipe(map((res) => res),
-        catchError(async (error) => this.errorHandling(error))
-      );
+    return this.httpClient.delete(apiURL).pipe(
+      map((res) => res),
+      catchError(async (error) => this.errorHandling(error)),
+    );
   }
-
 
   private errorHandling(error: HttpErrorResponse): HttpErrorResponse {
     switch (error.status) {
@@ -77,7 +73,7 @@ export class ApiService {
         return error;
       }
       default: {
-        return error
+        return error;
       }
     }
   }

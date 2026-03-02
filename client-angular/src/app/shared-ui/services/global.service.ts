@@ -1,7 +1,7 @@
 import { computed, Injectable, signal } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
-import { catchError, map, Observable, Subject, throwError } from 'rxjs';
+import { BehaviorSubject, catchError, map, Observable, Subject, throwError } from 'rxjs';
 import { JwtService, UsersService } from '..';
 import { environment } from '../../../environments/environment';
 import { ApiService } from './api.service';
@@ -20,6 +20,9 @@ export class GlobalService {
 
   private subject = new Subject<any>();
   private progress = new Subject<any>();
+  private progresss = new BehaviorSubject<any>({
+    
+  });
   baseUrl: string = environment.baseUrl;
   users = 'users';
 
@@ -111,15 +114,9 @@ export class GlobalService {
         email: userInfo.email,
       };
       this.usersService.authentication(loginInfo).subscribe(
-        (data) => {
-          if (!data.currentUser) {
-            // this.globalService.sendActionChildToParent('stop');
-            this.jwtService.destroyToken();
-            this.sendActionChildToParent('Logout');
-            this.router.navigate(['/login']);
-          }
-        },
-        (error) => {},
+        {
+          
+        }
       );
     }
   }

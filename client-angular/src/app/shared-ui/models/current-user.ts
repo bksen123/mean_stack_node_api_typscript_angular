@@ -5,15 +5,15 @@ export class currentUser {
   name: string = '';
   email: string = '';
   mobile_number: string = '';
-  company_name:string = '';
-  short_bio:string = '';
-  factory_address:string = '';
-  office_address:string = '';
-  website:string = '';
-  expertise:string='';
-  group_since:string='';
-  business_type:string='';
-  state:string='';
+  company_name: string = '';
+  short_bio: string = '';
+  factory_address: string = '';
+  office_address: string = '';
+  website: string = '';
+  expertise: string = '';
+  group_since: string = '';
+  business_type: string = '';
+  state: string = '';
   sub_plan_status: boolean = false;
   verified: number = 0;
   password?: string = '';
@@ -25,4 +25,9 @@ export class currentUser {
   dob: Date = new Date();
   is_active: number = 1;
   role: string = environment.role.userRole;
+}
+
+export interface user {
+  id: number | string;
+  name: string;
 }

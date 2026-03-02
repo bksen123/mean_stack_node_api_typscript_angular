@@ -21,6 +21,7 @@ export class AlertComponent implements OnInit, OnDestroy {
   alerts: Alert[] = [];
   @Input() childValue: any;
   @Output() childValueChange = new EventEmitter<any>();
+  @Output() newchildtoparent = new EventEmitter<any>();
 
   constructor(private alertService: AlertService) {}
 
@@ -40,6 +41,7 @@ export class AlertComponent implements OnInit, OnDestroy {
 
   changeName() {
     this.childValueChange.emit('bharat Kumar sen');
+    this.newchildtoparent.emit('parent to child');
   }
   removeAlert(alert: Alert) {
     this.alerts = this.alerts.filter((x) => x !== alert);

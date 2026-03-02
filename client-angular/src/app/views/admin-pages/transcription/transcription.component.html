@@ -27,7 +27,9 @@
 <app-alert [childValue]="parentValue"></app-alert>
  one way binding form parent to child -->
 <!-- two way binding from parent to child and child to parent -->
-<app-alert [(childValue)]="parentValue"></app-alert>
+<app-alert [(childValue)]="parentValue" (newchildtoparent)="test($event)"></app-alert>
+
+
 
 <div style="min-height: 450px" class="bg-white">
   <table class="table">

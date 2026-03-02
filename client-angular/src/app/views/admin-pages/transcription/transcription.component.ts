@@ -43,6 +43,10 @@ export class transcriptionComponent {
   public deletetranscriptionModal: any = ModalDirective;
   transcriptions: any;
   parentValue: any = 'bharat';
+
+  test(event: any) {
+    console.log('event', event);
+  }
   constructor(
     private spinner: NgxSpinnerService,
     private transcriptionService: TranscriptionService,
